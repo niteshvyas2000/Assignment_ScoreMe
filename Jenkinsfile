@@ -4,7 +4,7 @@ pipeline {
         SONARQUBE = 'Sonarqube'  // Name of the SonarQube instance configured in Jenkins
     }
     tools {
-        sonarScanner 'SonarQubeScanner' // Name of the SonarScanner tool configured in Jenkins
+        hudson.plugins.sonar.SonarRunnerInstallation 'SonarQubeScanner' // Correct tool type
     }
 
     stages {
