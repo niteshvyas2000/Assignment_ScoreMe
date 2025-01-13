@@ -1,52 +1,30 @@
 pipeline {
     agent any
-
-    environment {
+    environmnt {
         SONARQUBE = 'Sonarqube'  // Name of the SonarQube instance configured in Jenkins
+    }
+    tools {
+        sonarQube 'SonarQubeScanner' // Replace with your SonarQube Scanner name
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
-        // stage('Build') {
-        //     steps {
-        //         // Build your project here (e.g., Maven, Gradle, npm)
-        //         sh 'mvn clean install' // Example for Maven
-        //     }
-        // }
-
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    // Run SonarQube analysis
-                    sonarScanner(
-                        // Use the configured SonarQube server from Jenkins
-                        installation: "${env.SONARQUBE}",
-                        properties: [
-                            "sonar.projectKey=test-project",  // Your project key in SonarQube
-                            "sonar.projectName=test-project",     // Your project name in SonarQube
-                            "sonar.sources=src"                // The source directory for the analysis
-                        ]
-                    )
+                withSonarQubeEnv('Sonarqube') { // Replace with your SonarQube server name
+                    sh 'sonar-scanner -Dsonar.projectKey=test-project -Dsonar.sources=src' 
                 }
             }
         }
-
         stage('Quality Gate') {
             steps {
-                // Wait for the analysis results and quality gate status
-                waitForQualityGate abortPipeline: true
+                script {
+                    def qg = waitForQualityGate()
+                    if (qg.status != 'OK') {
+                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                    }
+                }
             }
         }
     }
-
-    post {
-        always {
-            cleanWs()
-        }
-    }
+    
 }
