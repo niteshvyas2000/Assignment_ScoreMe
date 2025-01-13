@@ -3,15 +3,15 @@ pipeline {
     environment {
         SONARQUBE = 'Sonarqube'  // Name of the SonarQube instance configured in Jenkins
     }
-    tools {
-        sonarScanner 'SonarQubeScanner'
-    }
-
     stages {
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv("${SONARQUBE}") { // Use the environment variable
-                    sh 'sonar-scanner -Dsonar.projectKey=test-project -Dsonar.sources=src' 
+                script {
+                    // Ensure the SonarQube Scanner is installed and available
+                    def scannerHome = tool name: 'SonarQubeScanner', type: 'SonarScanner' 
+                    withSonarQubeEnv("${SONARQUBE}") { 
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=test-project -Dsonar.sources=src"
+                    }
                 }
             }
         }
