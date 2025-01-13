@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'maven:3.8.6-openjdk-11'
+        }
+    }
 
     environment {
         SONARQUBE = 'Sonarqube'  // Name of the SonarQube instance configured in Jenkins
