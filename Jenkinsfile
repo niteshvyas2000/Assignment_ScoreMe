@@ -4,12 +4,12 @@ pipeline {
         SONARQUBE = 'Sonarqube'
     }
     stages {
-        stage('Test SonarQube Scanner') {
+        stage('Check SonarQube Scanner') {
             steps {
                 script {
-                    // Check if the tool is available
+                    // Check if the tool is available and print its path
                     def scannerHome = tool name: 'SonarQubeScanner', type: 'SonarScanner'
-                    echo "SonarQube Scanner found at: ${scannerHome}"
+                    echo "SonarQube Scanner is available at: ${scannerHome}"
                 }
             }
         }
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 script {
                     def scannerHome = tool name: 'SonarQubeScanner', type: 'SonarScanner'
-                    withSonarQubeEnv("${SONARQUBE}") {
+                    withSonarQubeEnv("${SONARQUBE}") { 
                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=test-project -Dsonar.sources=src"
                     }
                 }
