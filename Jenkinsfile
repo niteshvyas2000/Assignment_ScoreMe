@@ -1,15 +1,23 @@
 pipeline {
     agent any
     environment {
-        SONARQUBE = 'Sonarqube'  // Name of the SonarQube instance configured in Jenkins
+        SONARQUBE = 'Sonarqube'
     }
     stages {
+        stage('Test SonarQube Scanner') {
+            steps {
+                script {
+                    // Check if the tool is available
+                    def scannerHome = tool name: 'SonarQubeScanner', type: 'SonarScanner'
+                    echo "SonarQube Scanner found at: ${scannerHome}"
+                }
+            }
+        }
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Ensure the SonarQube Scanner is installed and available
-                    def scannerHome = tool name: 'SonarQubeScanner', type: 'SonarScanner' 
-                    withSonarQubeEnv("${SONARQUBE}") { 
+                    def scannerHome = tool name: 'SonarQubeScanner', type: 'SonarScanner'
+                    withSonarQubeEnv("${SONARQUBE}") {
                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=test-project -Dsonar.sources=src"
                     }
                 }
