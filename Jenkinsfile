@@ -14,9 +14,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                withMaven(maven: 'Maven 3.6') {
-                    sh 'mvn clean install'
-                }
+                // Build your project here (e.g., Maven, Gradle, npm)
+                sh 'mvn clean install' // Example for Maven
             }
         }
 
