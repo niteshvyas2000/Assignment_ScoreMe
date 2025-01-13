@@ -12,12 +12,12 @@ pipeline {
             }
         }
 
-        stage('Build') {
-            steps {
-                // Build your project here (e.g., Maven, Gradle, npm)
-                sh 'mvn clean install' // Example for Maven
-            }
-        }
+        // stage('Build') {
+        //     steps {
+        //         // Build your project here (e.g., Maven, Gradle, npm)
+        //         sh 'mvn clean install' // Example for Maven
+        //     }
+        // }
 
         stage('SonarQube Analysis') {
             steps {
