@@ -3,6 +3,9 @@ pipeline {
     environment {
         SONARQUBE = 'Sonarqube'  // Name of the SonarQube instance configured in Jenkins
     }
+    tools {
+        sonarScanner 'SonarQubeScanner' // Name of the SonarScanner tool configured in Jenkins
+    }
 
     stages {
         stage('SonarQube Analysis') {
